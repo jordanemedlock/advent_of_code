@@ -84,3 +84,16 @@ executable day7
                     , unordered-containers
     hs-source-dirs:   app
     default-language: GHC2021
+
+executable day8
+    import:           warnings
+    main-is:          Day8.hs
+    -- other-modules:
+    -- other-extensions:
+    build-depends:    base >=4.16.3.0
+                    , text
+                    , hspec
+                    , unordered-containers
+                    , vector
+    hs-source-dirs:   app
+    default-language: GHC2021
