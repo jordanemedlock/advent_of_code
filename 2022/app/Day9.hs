@@ -57,7 +57,7 @@ moveTail (hx, hy) (tx, ty) = (tx + ndx, ty + ndy)
             | otherwise = error "Edge case"
 
 drawState :: State -> String
-drawState (State grid ((hx, hy):ts)) = unlines $ [ unwords [ pickChar x y | x <- [hx-10..hx+10] ] | y <- [hy-10..hy+10] ]
+drawState (State grid ((hx, hy):ts)) = unlines $ [ concat [ pickChar x y | x <- [200..358] ] | y <- [172..380] ]
     where
         pickChar x y
             | x == hx && y == hy = "H"
@@ -80,7 +80,7 @@ main = do
     state2 <- loop insts $ initState 2
     putStrLn $ drawState state2
     print $ sum $ V.map (V.sum . V.map fromEnum) $ grid state2
-    
+
     state10 <- loop insts $ initState 10
     putStrLn $ drawState state10
     print $ sum $ V.map (V.sum . V.map fromEnum) $ grid state10
