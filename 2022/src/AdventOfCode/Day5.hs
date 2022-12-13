@@ -87,11 +87,11 @@ execInstrn (Instruction n s e) = moveCrates n s e
 
 data Day5 = Day5 deriving (Show, Read, Eq)
 instance Day Day5 where
-    -- TODO: this is for sure wrong but needs to be tested
+    -- TODO: This is not generalized!!! I need to not assume the number of columns
     partOne :: Day5 -> String -> String
-    partOne _ input = show $ uncurry (foldr execInstr1) $ readCargoAndInstructions input
+    partOne _ input = unCrate.head <$> unCargo (uncurry (foldr execInstr1) $ readCargoAndInstructions input)
     partTwo :: Day5 -> String -> String
-    partTwo _ input = show $ uncurry (foldr execInstrn) $ readCargoAndInstructions input
+    partTwo _ input = unCrate.head <$> unCargo (uncurry (foldr execInstrn) $ readCargoAndInstructions input)
 
 readCargoAndInstructions :: String -> (Cargo, [Instruction])
 readCargoAndInstructions input = (cargo, instructions)
