@@ -1,6 +1,6 @@
-module Main where
-import Control.Monad (foldM)
-import Test.Hspec
+module AdventOfCode.Day7 where
+
+import AdventOfCode.Types ( Day(..) )
 import qualified Data.HashMap.Strict as HM
 import Data.List (sort)
 
@@ -67,35 +67,21 @@ flatSizes (File _) = []
 flatSizes dir = dirSize dir : concatMap (flatSizes . snd) (HM.toList $ elems dir)
     
 
-
-main :: IO ()
-main = do
-    input <- readFile "./data/day7.txt"
-    let root = Directory HM.empty
-    let wd = WorkingDirectory root []
-
-    -- let root' = addFileToPath 113975 "bqpslnv" root ["/"] 
-
-    wd' <- foldM execInst' wd (lines input)
-
-    let totalSize = dirSize $ rootElem wd'
-    let diff = totalSize - 40000000
-    let sizes = flatSizes $ rootElem wd'
+data Day7 = Day7 deriving (Show, Read, Eq)
+instance Day Day7 where
+    partOne :: Day7 -> String -> String
+    partOne _ input = show $ sum $ filter (<100000) $ getSizes $ parseWD input
+    partTwo :: Day7 -> String -> String
+    partTwo _ input = show $ minimum $ filter (>(getTotalSize wd - 40000000)) $ getSizes wd
+        where
+            wd = parseWD input
 
 
-    putStrLn $ tree $ rootElem wd'
-    putStrLn $ show $ sum $ filter (<100000) $ sizes
+getSizes :: WorkingDirectory -> [Int]
+getSizes = flatSizes . rootElem
 
-    putStrLn $ "We need to cut out: " <> show diff
-    putStrLn $ show $ sort $ filter (>diff) $ sizes
-    -- hspec $ do
-    --     describe "addFileToPath" $ do
-    --         it "returns the sum of its two arguments" $ do
-    --             add 1 2 `shouldBe` 3
+parseWD :: String -> WorkingDirectory
+parseWD input = foldl (flip execInst) (WorkingDirectory (Directory HM.empty) []) (lines input)
 
-execInst' :: WorkingDirectory -> String -> IO WorkingDirectory
-execInst' wd inst = do
-    -- putStrLn $ "Running instruction: "<>inst
-    let wd' = execInst inst wd
-    -- putStrLn $ tree $ rootElem wd'
-    return wd'
+getTotalSize :: WorkingDirectory -> Int
+getTotalSize = dirSize . rootElem

@@ -1,9 +1,10 @@
-module Main where
+module AdventOfCode.Day9 where
 
 import qualified Data.Vector as V
 import Data.Vector ((!), (//))
 import Data.Maybe (isJust, fromJust)
 import Data.List (elemIndex)
+import AdventOfCode.Types ( Day(..) )
 
 type Grid = V.Vector (V.Vector Bool)
 data State = State { grid :: Grid, rope :: [(Int,Int)] } deriving (Show)
@@ -70,25 +71,14 @@ drawState _ = error "Edge case"
 
 
 
+data Day9 = Day9 deriving (Show, Read, Eq)
+instance Day Day9 where
+    -- TODO: I keep assuming foldr is a drop in replacement for whatever loop I make
+    partOne :: Day9 -> String -> String
+    partOne _ input = show $ countVisited $ grid $ foldr execInst (initState 2) $ concatMap lineToDir $ lines input
+    partTwo :: Day9 -> String -> String
+    partTwo _ input = show $ countVisited $ grid $ foldr execInst (initState 10) $ concatMap lineToDir $ lines input
 
-
-
-main :: IO ()
-main = do
-    input <- readFile "./data/day9.txt"
-    let insts = concatMap lineToDir $ lines input
-    state2 <- loop insts $ initState 2
-    putStrLn $ drawState state2
-    print $ sum $ V.map (V.sum . V.map fromEnum) $ grid state2
-
-    state10 <- loop insts $ initState 10
-    putStrLn $ drawState state10
-    print $ sum $ V.map (V.sum . V.map fromEnum) $ grid state10
-
-loop :: [(Int, Int)] -> State -> IO State
-loop (inst:insts) state = do
-    let state' = execInst inst state
-    -- putStrLn $ drawState state'
-    loop insts state'
-loop [] state = return state
+countVisited :: Grid -> Int
+countVisited grid = sum $ V.map (V.sum . V.map fromEnum) grid
 

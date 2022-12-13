@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Main where
+module AdventOfCode.Day11 where
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
-import Control.Monad ( forM_ )
 import Data.List (sort)
+import AdventOfCode.Types ( Day(..) )
 
 data Operation = Add { op :: Int } | Mult { op :: Int } | Exp { op :: Int } deriving Show
 data Monkey = Monkey 
@@ -83,19 +83,32 @@ runRound superMod attn state@(State monkeys) = foldl runMonkey' (replicate (leng
                                         let (left, this:right) = splitAt i counts in -- god fucking complicated
                                         let counts' = left <> (this+count : right) in (counts', state'')
 
-main :: IO ()
-main = do
-    input <- T.readFile "./data/day11.txt"
-    let monkeyLines = lines.T.unpack <$> T.splitOn "\n\n" input
-    let monkeys = parseMonkey <$> monkeyLines
-    let superMod = product $ testDivisibleBy <$> monkeys
-    let runRound' attn (cs, state) = let (cs', state') = runRound superMod attn state in (zipWith (+) cs cs', state')
-    let states1 = iterate (runRound' True) (replicate (length monkeys) 0, State monkeys)
-    let (counts1, _) = states1 !! 20
-    print $ product $ take 2 $ reverse $ sort counts1
 
+readMonkeys :: String -> [Monkey]
+readMonkeys input = parseMonkey . lines . T.unpack <$> T.splitOn "\n\n" (T.pack input)
 
-    let states2 = iterate (runRound' False) (replicate (length monkeys) 0, State monkeys)
-    let (counts2, _) = states2 !! 10000
-    print $ product $ take 2 $ reverse $ sort counts2
+superMod :: [Monkey] -> Int
+superMod monkeys = product $ testDivisibleBy <$> monkeys
+
+runRoundAndCombineCounts :: [Monkey] -> Bool -> ([Int], State) -> ([Int], State)
+runRoundAndCombineCounts monkeys attn (cs, state) = (zipWith (+) cs cs', state')
+    where 
+        (cs', state') = runRound (superMod monkeys) attn state
+
+initCountAndState :: Num a => [Monkey] -> ([a], State)
+initCountAndState monkeys = (replicate (length monkeys) 0, State monkeys)
+
+runAllRounds :: Bool -> [Monkey] -> [([Int], State)]
+runAllRounds attn monkeys = iterate (runRoundAndCombineCounts monkeys attn) (initCountAndState monkeys)
+
+productOfTheTwoLargestCounts :: ([Int], b) -> Int
+productOfTheTwoLargestCounts = product . take 2 . reverse . sort . fst
+
+data Day11 = Day11 deriving (Show, Read, Eq)
+instance Day Day11 where
+    partOne :: Day11 -> String -> String
+    partOne _ = show . productOfTheTwoLargestCounts . (!! 20) . runAllRounds True . readMonkeys
+    partTwo :: Day11 -> String -> String
+    partTwo _ = show . productOfTheTwoLargestCounts . (!! 10000) . runAllRounds False . readMonkeys
+
     

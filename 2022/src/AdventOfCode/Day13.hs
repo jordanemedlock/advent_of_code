@@ -1,4 +1,4 @@
-module Main where
+module AdventOfCode.Day13 where
 
 import qualified Text.Parsec as P
 import qualified Text.Parsec.Token as P
@@ -7,6 +7,7 @@ import Control.Applicative ( Alternative((<|>)) )
 import Data.List (intercalate, sortBy)
 import Control.Monad (forM_)
 import Data.Maybe (catMaybes, listToMaybe, fromJust)
+import AdventOfCode.Types ( Day(..) )
 
 data Value = List [Value] | Item Int deriving (Eq)
 instance Show Value where
@@ -33,23 +34,32 @@ compareValues left right = case correctOrder (left, right) of
     (Just False) -> GT
     (Just True) -> LT
 
+data Day13 = Day13 deriving (Show, Read, Eq)
+instance Day Day13 where
+    partOne :: Day13 -> String -> String
+    partOne _ input = show $ sum $ correctIndexes $ fromJust . correctOrder <$> parseResultPairs input
+    partTwo :: Day13 -> String -> String
+    partTwo _ input = show $ product $ findInclusions $ sortBy compareValues $ partTwoInclusions <> concatMap tupleToList (parseResultPairs input)
 
-main :: IO ()
-main = do
-    let filename = "./data/day13.txt"
-    input <- readFile filename
-    let (Right resultPairs) = P.parse pairs filename input
-    let corrects = fromJust . correctOrder <$> resultPairs
-    let indices = zipWith (\i x -> if x then i else 0) [1..] corrects
-    print $ sum indices
+partTwoInclusions :: [Value]
+partTwoInclusions = [List [List [Item 2]], List [List [Item 6]]]
 
-    let inclusions = [List [List [Item 2]], List [List [Item 6]]]
+parseResultPairs :: String -> [(Value, Value)]
+parseResultPairs input = fromRight $ P.parse pairs "" input
 
-    let newList = inclusions <> concatMap (\(l,r) -> [l,r]) resultPairs
-    let sortedList = sortBy compareValues newList
-    -- mapM_ print sortedList
-    let indices' = zipWith (\i x -> if x `elem` inclusions then i else 1) [1..] sortedList
-    print $ product indices'
+fromRight :: Show b => Either b a -> a
+fromRight (Right x) = x
+fromRight (Left x) = error $ show x
+
+correctIndexes :: [Bool] -> [Int]
+correctIndexes = zipWith (\i x -> if x then i else 0) [1..]
+
+tupleToList :: (a, a) -> [a]
+tupleToList (x,y) = [x,y]
+
+findInclusions :: [Value] -> [Int]
+findInclusions = zipWith (\i x -> if x `elem` partTwoInclusions then i else 1) [1..]
+
 
 
     

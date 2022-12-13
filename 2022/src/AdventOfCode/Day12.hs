@@ -1,12 +1,12 @@
-module Main where
+module AdventOfCode.Day12 where
 
 import qualified Data.Vector as V
 import Data.Vector ((!))
 import Control.Arrow ( Arrow((&&&),(***)) )
 import Data.Graph.AStar ( aStar ) 
 import qualified Data.HashSet as HS
-import Data.Maybe ( mapMaybe ) 
-import Control.Monad ( forM_ )
+import Data.Maybe ( mapMaybe, fromJust ) 
+import AdventOfCode.Types ( Day(..) )
 
 
 type Grid a = V.Vector (V.Vector a)
@@ -46,8 +46,8 @@ possibleNeighbors :: Grid Char -> Pos -> [Pos]
 possibleNeighbors grid (x,y) = filter notTooHilly $ filter (inBounds (gridDims grid)) $ ((x+)***(y+)) <$> [(0,1),(0,-1),(1,0),(-1,0)]
     where 
         val = grid `indexGrid` (x,y)
-        notTooHilly pos | grid `indexGrid` pos `elem` "S" = True
-                        | val `elem` "S" = True
+        notTooHilly pos | grid `indexGrid` pos == 'S' = True
+                        | val == 'S' = True
                         | val == 'z' && grid `indexGrid` pos == 'E' = True
                         | otherwise = fromEnum (grid `indexGrid` pos) - fromEnum val <= 1
 
@@ -69,14 +69,16 @@ shortestPath grid start end@(ex, ey) = aStar graph dist heur goal start
 compareBy :: Ord a => (t -> a) -> t -> t -> Ordering
 compareBy f a b = f a `compare` f b
 
-main :: IO ()
-main = do 
-    input <- readFile "./data/day12.txt"
-    let grid = readGrid input
-    let (width, height) = gridDims grid
-    let (start, end) = findStartAndEnd grid
-    let Just path = shortestPath grid start end
-    print $ length path
+data Day12 = Day12 deriving (Show, Read, Eq)
+instance Day Day12 where
+    partOne :: Day12 -> String -> String
+    partOne _ input = show $ length $ fromJust $ uncurry (shortestPath grid) $ findStartAndEnd grid
+        where 
+            grid = readGrid input
+    partTwo :: Day12 -> String -> String
+    partTwo _ input = show $ minimum $ length <$> mapMaybe (flip (shortestPath grid) end) (findPossibleStarts grid)
+        where 
+            grid = readGrid input
+            (_, end) = findStartAndEnd grid
 
-    let starts = findPossibleStarts grid
-    print $ minimum $ length <$> mapMaybe (flip (shortestPath grid) end) starts
+

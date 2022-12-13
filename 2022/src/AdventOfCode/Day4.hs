@@ -1,10 +1,10 @@
 
 {-# LANGUAGE OverloadedStrings #-}
-module Main where
+module AdventOfCode.Day4 where
 import qualified Data.Text as T
-import qualified Data.Text.IO as T
 import Control.Arrow ((***))
 import Data.List (intersect)
+import AdventOfCode.Types ( Day(..) )
 
 makeRange :: T.Text -> (Int,Int)
 makeRange x = makeTuple $ read . T.unpack <$> T.splitOn "-" x
@@ -23,11 +23,14 @@ makeTuple :: Show b => [b] -> (b, b)
 makeTuple [x,y] = (x,y)
 makeTuple x = error $ show x
 
-main :: IO ()
-main = do
-    input <- T.readFile "./data/day4.txt"
+data Day4 = Day4 deriving (Show, Read, Eq)
+instance Day Day4 where
+    partOne :: Day4 -> String -> String
+    partOne _ input = show $ sum $ fromEnum . uncurry eitherContains <$> readPairs input
+    partTwo :: Day4 -> String -> String
+    partTwo _ input = show $ sum $ fromEnum . uncurry overlaps <$> readPairs input
 
-    let pairs = (makeRange *** makeRange) . makeTuple . T.splitOn "," <$> T.lines input
-    print $ sum $ fromEnum . uncurry eitherContains <$> pairs
-    print $ sum $ fromEnum . uncurry overlaps <$> pairs
+readPairs :: String -> [((Int, Int), (Int, Int))]
+readPairs input = (makeRange *** makeRange) . makeTuple . T.splitOn "," <$> T.lines (T.pack input)
+
 

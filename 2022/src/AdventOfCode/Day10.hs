@@ -1,5 +1,6 @@
-module Main where
+module AdventOfCode.Day10 where
 
+import AdventOfCode.Types ( Day(..) )
 import Control.Arrow ( Arrow((&&&)) ) 
 
 data Inst = AddX { val :: Int, cyclesLeft :: Int } | NoOp deriving Show
@@ -31,13 +32,14 @@ iF x y c = if c then x else y
 drawLine :: [State] -> String
 drawLine states = iF '#' '.' <$>  zipWith (\col state -> reg state-1 <= col && col <= reg state+1) [0..] states
 
-main :: IO ()
-main = do
-    input <- readFile "./data/day10.txt"
-    let insts = parseInst <$> lines input
-    let states = runCode insts (State 0 1 NoOp)
-    -- Pointless notation FTW
-    print $ sum $ uncurry (*) . (reg &&& cycleNum) . (states !!) . subtract 1 <$> [20, 60..220]
+data Day10 = Day10 deriving (Show, Read, Eq)
+instance Day Day10 where
+    partOne :: Day10 -> String -> String
+    partOne _ input = show $ sum $ uncurry (*) . (reg &&& cycleNum) . (parseAndGetStates input !!) . subtract 1 <$> [20, 60..220]
+    partTwo :: Day10 -> String -> String
+    partTwo _ input = unlines $ drawLine <$> take 6 (crtLines 40 $ parseAndGetStates input)
 
-    putStrLn $ unlines $ drawLine <$> take 10 (crtLines 40 states)
+parseAndGetStates :: String -> [State]
+parseAndGetStates input = runCode (parseInst <$> lines input) (State 0 1 NoOp)
+
 

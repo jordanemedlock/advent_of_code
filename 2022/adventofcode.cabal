@@ -14,150 +14,25 @@ extra-doc-files:    CHANGELOG.md
 
 common warnings
     ghc-options: -Wall
-    
-executable day1
-    import:           warnings
-    main-is:          Day1.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-    hs-source-dirs:   app
-    default-language: GHC2021
 
-executable day2
+library
     import:           warnings
-    main-is:          Day2.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day3
-    import:           warnings
-    main-is:          Day3.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day4
-    import:           warnings
-    main-is:          Day4.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day5
-    import:           warnings
-    main-is:          Day5.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day6
-    import:           warnings
-    main-is:          Day6.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day7
-    import:           warnings
-    main-is:          Day7.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-                    , hspec
-                    , unordered-containers
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day8
-    import:           warnings
-    main-is:          Day8.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-                    , hspec
-                    , unordered-containers
-                    , vector
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day9
-    import:           warnings
-    main-is:          Day9.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-                    , hspec
-                    , unordered-containers
-                    , vector
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day10
-    import:           warnings
-    main-is:          Day10.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-                    , hspec
-                    , unordered-containers
-                    , vector
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day11
-    import:           warnings
-    main-is:          Day11.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-                    , hspec
-                    , unordered-containers
-                    , vector
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day12
-    import:           warnings
-    main-is:          Day12.hs
-    -- other-modules:
-    -- other-extensions:
-    build-depends:    base >=4.16.3.0
-                    , text
-                    , hspec
-                    , unordered-containers
-                    , vector
-                    , hashable
-                    , heap
-                    , astar
-    hs-source-dirs:   app
-    default-language: GHC2021
-
-executable day13
-    import:           warnings
-    main-is:          Day13.hs
-    -- other-modules:
-    -- other-extensions:
+    hs-source-dirs:   src
+    exposed-modules:  AdventOfCode
+    other-modules:    AdventOfCode.Day1
+                    , AdventOfCode.Day2
+                    , AdventOfCode.Day3
+                    , AdventOfCode.Day4
+                    , AdventOfCode.Day5
+                    , AdventOfCode.Day6
+                    , AdventOfCode.Day7
+                    , AdventOfCode.Day8
+                    , AdventOfCode.Day9
+                    , AdventOfCode.Day10
+                    , AdventOfCode.Day11
+                    , AdventOfCode.Day12
+                    , AdventOfCode.Day13
+                    , AdventOfCode.Types
     build-depends:    base >=4.16.3.0
                     , text
                     , hspec
@@ -167,5 +42,15 @@ executable day13
                     , heap
                     , astar
                     , parsec
+    default-extensions:   QuasiQuotes
+                        , OverloadedStrings
+    default-language: GHC2021
+
+
+executable day
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    base >=4.16.3.0
+                    , adventofcode
     hs-source-dirs:   app
     default-language: GHC2021

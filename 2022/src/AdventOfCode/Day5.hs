@@ -1,12 +1,14 @@
-module Main where
+module AdventOfCode.Day5 where
 
 import Data.List (transpose)
-import Control.Concurrent (threadDelay)
+import AdventOfCode.Types ( Day(..) )
 
 newtype Crate = Crate { unCrate :: Char }
 instance Show Crate where
+    show :: Crate -> String
     show (Crate c) = "["<>[c]<>"]"
 instance Read Crate where
+    readsPrec :: Int -> ReadS Crate
     readsPrec i ('[':c:']':rest) = [(Crate c, rest)]
     readsPrec _ _ = []
 
@@ -83,23 +85,16 @@ execInstr1 (Instruction n s e) cargo = iterate (moveCrates 1 s e) cargo !! n
 execInstrn :: Instruction -> Cargo -> Cargo
 execInstrn (Instruction n s e) = moveCrates n s e 
 
+data Day5 = Day5 deriving (Show, Read, Eq)
+instance Day Day5 where
+    -- TODO: this is for sure wrong but needs to be tested
+    partOne :: Day5 -> String -> String
+    partOne _ input = show $ uncurry (foldr execInstr1) $ readCargoAndInstructions input
+    partTwo :: Day5 -> String -> String
+    partTwo _ input = show $ uncurry (foldr execInstrn) $ readCargoAndInstructions input
 
-
-main :: IO ()
-main = do
-    input <- readFile "./data/day5.txt"
-    let cargo = readCargo input
-    print cargo
-    let instructions = read @Instruction <$> dropWhile (not.isInst) (lines input)
-    loop instructions cargo
-
-
-loop :: [Instruction] -> Cargo -> IO ()
-loop (inst:rest) cargo = do
-    let cargo' = execInstrn inst cargo
-    putStrLn "\n\n\n"
-    print inst
-    print cargo'
-    loop rest cargo'
--- loop (Instruction n s e:rest) cargo = loop (Instruction 1 s e:Instruction (n-1) s e:rest) cargo
-loop [] _ = return ()
+readCargoAndInstructions :: String -> (Cargo, [Instruction])
+readCargoAndInstructions input = (cargo, instructions)
+    where 
+        cargo = readCargo input
+        instructions = read @Instruction <$> dropWhile (not.isInst) (lines input)

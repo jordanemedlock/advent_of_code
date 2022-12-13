@@ -1,6 +1,7 @@
-module Main where
+module AdventOfCode.Day3 where
 import Data.List (intersect)
 
+import AdventOfCode.Types ( Day(..) )
 
 splitHalf :: [a] -> ([a], [a])
 splitHalf x = splitAt (length x `div` 2) x
@@ -21,9 +22,9 @@ score x | x `elem` ['a'..'z'] = (fromEnum x - fromEnum 'a') + 1
         | x `elem` ['A'..'Z'] = (fromEnum x - fromEnum 'A') + 27
         | otherwise = error "Edge cases suck"
         
-main :: IO ()
-main = do
-    input <- readFile "./data/day3.txt"
-
-    print $ sum $ score.uncurry findCommon.splitHalf <$> lines input
-    print $ sum $ score <$> groupMap findBadge (lines input)
+data Day3 = Day3 deriving (Show, Read, Eq)
+instance Day Day3 where
+    partOne :: Day3 -> String -> String
+    partOne _ input = show $ sum $ score.uncurry findCommon.splitHalf <$> lines input
+    partTwo :: Day3 -> String -> String
+    partTwo _ input = show $ sum $ score <$> groupMap findBadge (lines input)

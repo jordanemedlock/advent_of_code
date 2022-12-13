@@ -1,5 +1,6 @@
-module Main where
+module AdventOfCode.Day8 where
 
+import AdventOfCode.Types ( Day(..) )
 import qualified Data.Vector as V
 import Data.Vector ((//),(!))
 import Control.Arrow ( Arrow((***), (&&&)) )
@@ -59,8 +60,8 @@ updateVisibility i@(x, y) grid
 treeDistance :: Int -> [Int] -> Int
 treeDistance value heights = min (length heights) ((1+).length $ takeWhile (<value) heights)
 
-treeScore :: (Int, Int) -> Grid -> Int
-treeScore i@(x, y) grid = left * right * up * down -- ((i, value, (leftValues, rightValues, upValues, downValues)), left * right * up * down) -- 
+treeScore :: Grid -> (Int, Int) -> Int
+treeScore grid i@(x, y) = left * right * up * down -- ((i, value, (leftValues, rightValues, upValues, downValues)), left * right * up * down) -- 
     where 
         value = fst $ indexGrid grid i
         dims@(width, height) = gridDims grid
@@ -78,12 +79,14 @@ pathToEnd (dx, dy) (w,h) (x,y) = zip [x+dx,x+dx*2..ex] [y+dy,y+dy*2..ey]
 valsAtPath :: Grid -> [(Int,Int)] -> [Int]
 valsAtPath grid = map (fst.indexGrid grid)
 
-main :: IO ()
-main = do
-    input <- readFile "./data/day8.txt"
-    let grid = parseGrid input
-    let height = V.length grid
-    let width = V.length $ V.head grid
-    let pathway = makePathway width height
-    print $ length $ filter ((==Visible).snd) (concatMap V.toList $ V.toList (foldr updateVisibility grid pathway))
-    print $ maximum $ flip treeScore grid <$> pathway
+data Day8 = Day8 deriving (Show, Read, Eq)
+instance Day Day8 where
+    partOne :: Day8 -> String -> String
+    partOne _ input = show $ length $ filter ((==Visible).snd) (concatMap V.toList $ V.toList (foldr updateVisibility grid $ pathwayForGrid grid))
+        where grid = parseGrid input
+    partTwo :: Day8 -> String -> String
+    partTwo _ input = show $ maximum $ treeScore grid <$> pathwayForGrid grid
+        where grid = parseGrid input
+
+pathwayForGrid :: Grid -> [(Int, Int)]
+pathwayForGrid = uncurry makePathway . gridDims

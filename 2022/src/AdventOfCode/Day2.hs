@@ -1,4 +1,6 @@
-module Main where
+module AdventOfCode.Day2 where
+
+import AdventOfCode.Types ( Day(..) )
 
 data RPS = Rock | Paper | Scissors deriving (Show, Read, Enum, Eq, Ord)
 
@@ -35,9 +37,12 @@ guessRPS x Rock = loser x
 guessRPS x Paper = x
 guessRPS x Scissors = winner x
 
-main :: IO ()
-main = do
-    input <- readFile "./data/day2.txt"
-    let plays = map readRPS . words <$> lines input
-    print $ sum $ (\[x,y] -> roundScore x y) <$> plays
-    print $ sum $ (\[x,y] -> roundScore x $ guessRPS x y) <$> plays
+data Day2 = Day2 deriving (Show, Read, Eq)
+instance Day Day2 where
+    partOne :: Day2 -> String -> String
+    partOne _ input = show $ sum $ uncurry roundScore <$> readPlays input
+    partTwo :: Day2 -> String -> String
+    partTwo _ input = show $ sum $ (\(x,y) -> roundScore x $ guessRPS x y) <$> readPlays input
+
+readPlays :: String -> [(RPS, RPS)]
+readPlays input = (\[x,y] -> (x,y)) . map readRPS . words <$> lines input
