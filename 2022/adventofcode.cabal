@@ -136,3 +136,19 @@ executable day11
                     , vector
     hs-source-dirs:   app
     default-language: GHC2021
+
+executable day12
+    import:           warnings
+    main-is:          Day12.hs
+    -- other-modules:
+    -- other-extensions:
+    build-depends:    base >=4.16.3.0
+                    , text
+                    , hspec
+                    , unordered-containers
+                    , vector
+                    , hashable
+                    , heap
+                    , astar
+    hs-source-dirs:   app
+    default-language: GHC2021
