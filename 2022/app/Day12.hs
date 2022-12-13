@@ -80,8 +80,3 @@ main = do
 
     let starts = findPossibleStarts grid
     print $ minimum $ length <$> mapMaybe (flip (shortestPath grid) end) starts
-
-    -- forM_ [0..height-1] $ \y -> do
-    --     forM_ [0..width-1] $ \x -> do
-    --         if (x,y) `elem` path then putStr "#" else putStr "."
-    --     putStrLn ""
