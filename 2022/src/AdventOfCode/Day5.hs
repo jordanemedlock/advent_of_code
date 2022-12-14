@@ -61,7 +61,7 @@ addRowToCargo rowStr (Cargo columns) = Cargo $ zipWith addValue (groupNum 4 rowS
         addValue str crates = read str : crates 
 
 readCargo :: String -> Cargo
-readCargo str = foldr addRowToCargo (Cargo (replicate 9 [])) $ takeWhile isRow (lines str)
+readCargo str = foldr addRowToCargo (Cargo $ repeat []) $ takeWhile isRow (lines str)
 
 moveCrates :: Int -> Int -> Int -> Cargo -> Cargo
 moveCrates n s e cargo = addCrates e c cargo'
@@ -87,11 +87,10 @@ execInstrn (Instruction n s e) = moveCrates n s e
 
 data Day5 = Day5 deriving (Show, Read, Eq)
 instance Day Day5 where
-    -- TODO: This is not generalized!!! I need to not assume the number of columns
     partOne :: Day5 -> String -> String
-    partOne _ input = unCrate.head <$> unCargo (uncurry (foldr execInstr1) $ readCargoAndInstructions input)
+    partOne _ input = unCrate.head <$> unCargo (uncurry (foldl $ flip execInstr1) $ readCargoAndInstructions input)
     partTwo :: Day5 -> String -> String
-    partTwo _ input = unCrate.head <$> unCargo (uncurry (foldr execInstrn) $ readCargoAndInstructions input)
+    partTwo _ input = unCrate.head <$> unCargo (uncurry (foldl $ flip execInstrn) $ readCargoAndInstructions input)
 
 readCargoAndInstructions :: String -> (Cargo, [Instruction])
 readCargoAndInstructions input = (cargo, instructions)

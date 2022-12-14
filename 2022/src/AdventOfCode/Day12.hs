@@ -46,9 +46,10 @@ possibleNeighbors :: Grid Char -> Pos -> [Pos]
 possibleNeighbors grid (x,y) = filter notTooHilly $ filter (inBounds (gridDims grid)) $ ((x+)***(y+)) <$> [(0,1),(0,-1),(1,0),(-1,0)]
     where 
         val = grid `indexGrid` (x,y)
-        notTooHilly pos | grid `indexGrid` pos == 'S' = True
-                        | val == 'S' = True
+        notTooHilly pos | val == 'S' && grid `indexGrid` pos == 'a' = True
                         | val == 'z' && grid `indexGrid` pos == 'E' = True
+                        | val == 'S' && grid `indexGrid` pos /= 'a' = False
+                        | val /= 'z' && grid `indexGrid` pos == 'E' = False
                         | otherwise = fromEnum (grid `indexGrid` pos) - fromEnum val <= 1
 
 
@@ -72,13 +73,16 @@ compareBy f a b = f a `compare` f b
 data Day12 = Day12 deriving (Show, Read, Eq)
 instance Day Day12 where
     partOne :: Day12 -> String -> String
-    partOne _ input = show $ length $ fromJust $ uncurry (shortestPath grid) $ findStartAndEnd grid
+    partOne _ input = show $ length path
         where 
             grid = readGrid input
+            (width, height) = gridDims grid
+            path = fromJust $ uncurry (shortestPath grid) $ findStartAndEnd grid
     partTwo :: Day12 -> String -> String
-    partTwo _ input = show $ minimum $ length <$> mapMaybe (flip (shortestPath grid) end) (findPossibleStarts grid)
+    partTwo _ input = show $ minimum $ length <$> paths
         where 
             grid = readGrid input
             (_, end) = findStartAndEnd grid
+            paths = mapMaybe (flip (shortestPath grid) end) (findPossibleStarts grid)
 
 

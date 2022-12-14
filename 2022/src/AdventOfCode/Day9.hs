@@ -73,11 +73,10 @@ drawState _ = error "Edge case"
 
 data Day9 = Day9 deriving (Show, Read, Eq)
 instance Day Day9 where
-    -- TODO: I keep assuming foldr is a drop in replacement for whatever loop I make
     partOne :: Day9 -> String -> String
-    partOne _ input = show $ countVisited $ grid $ foldr execInst (initState 2) $ concatMap lineToDir $ lines input
+    partOne _ input = show $ countVisited $ grid $ foldl (flip execInst) (initState 2) $ concatMap lineToDir $ lines input
     partTwo :: Day9 -> String -> String
-    partTwo _ input = show $ countVisited $ grid $ foldr execInst (initState 10) $ concatMap lineToDir $ lines input
+    partTwo _ input = show $ countVisited $ grid $ foldl (flip execInst) (initState 10) $ concatMap lineToDir $ lines input
 
 countVisited :: Grid -> Int
 countVisited grid = sum $ V.map (V.sum . V.map fromEnum) grid
