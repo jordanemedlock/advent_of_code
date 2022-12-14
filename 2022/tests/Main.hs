@@ -3,85 +3,53 @@ module Main where
 import Test.Hspec
 import AdventOfCode
 import Control.Monad.IO.Class (liftIO)
+import Control.Monad (forM_)
+
+data Test = forall a. (Day a, Show a) => 
+    Test { day :: a
+         , filename :: FilePath
+         , partOneSolution :: String
+         , partTwoSolution :: String
+         }
+
+tests = [ Test Day1 "./data/day1_2.txt" "24000" "45000"
+        , Test Day2 "./data/day2_2.txt" "15" "12"
+        , Test Day3 "./data/day3_2.txt" "157" "70"
+        , Test Day4 "./data/day4_2.txt" "2" "4"
+        , Test Day5 "./data/day5_2.txt" "CMZ" "MCD"
+        , Test Day6 "./data/day6_2.txt" "7" "19"
+        , Test Day7 "./data/day7_2.txt" "95437" "24933642"
+        , Test Day8 "./data/day8_2.txt" "21" "8"
+        , Test Day9 "./data/day9_2.txt" "13" "1"
+        , Test Day10 "./data/day10_2.txt" "13140" "##..##..##..##..##..##..##..##..##..##..\n###...###...###...###...###...###...###.\n####....####....####....####....####....\n#####.....#####.....#####.....#####.....\n######......######......######......####\n#######.......#######.......#######.....\n"
+        
+        , Test Day11 "./data/day11_2.txt" "10605" "2713310158"
+        , Test Day12 "./data/day12_2.txt" "31" "29"
+        , Test Day13 "./data/day13_2.txt" "13" "140"
+
+        , Test Day1 "./data/day1.txt" "71924" "210406"
+        , Test Day2 "./data/day2.txt" "13221" "13131"
+        , Test Day3 "./data/day3.txt" "7553" "2758"
+        , Test Day4 "./data/day4.txt" "475" "825"
+        , Test Day5 "./data/day5.txt" "VRWBSFZWM" "RBTWJWMCF"
+        , Test Day6 "./data/day6.txt" "1757" "2950"
+        , Test Day7 "./data/day7.txt" "2061777" "4473403"
+        , Test Day8 "./data/day8.txt" "1717" "321975"
+        , Test Day9 "./data/day9.txt" "5735" "2478"
+        , Test Day10 "./data/day10.txt" "13220" "###..#..#..##..#..#.#..#.###..####.#..#.\n#..#.#..#.#..#.#.#..#..#.#..#.#....#.#..\n#..#.#..#.#..#.##...####.###..###..##...\n###..#..#.####.#.#..#..#.#..#.#....#.#..\n#.#..#..#.#..#.#.#..#..#.#..#.#....#.#..\n#..#..##..#..#.#..#.#..#.###..####.#..#.\n"
+        
+        , Test Day11 "./data/day11.txt" "120056" "21816744824"
+        , Test Day12 "./data/day12.txt" "468" "459"
+        , Test Day13 "./data/day13.txt" "5623" "20570"
+        ]
 
 main :: IO ()
 main = do
-    input1 <- readFile "./data/day1_2.txt"
-    input2 <- readFile "./data/day2_2.txt"
-    input3 <- readFile "./data/day3_2.txt"
-    input4 <- readFile "./data/day4_2.txt"
-    input5 <- readFile "./data/day5_2.txt"
-    input6 <- readFile "./data/day6_2.txt"
-    input7 <- readFile "./data/day7_2.txt"
-    input8 <- readFile "./data/day8_2.txt"
-    input9 <- readFile "./data/day9_2.txt"
-    input10 <- readFile "./data/day10_2.txt"
-    input11 <- readFile "./data/day11_2.txt"
-    input12 <- readFile "./data/day12_2.txt"
-    input13 <- readFile "./data/day13_2.txt"
     hspec $ do
-        describe "Day1" $ do
-            it "partOne" $ do
-                partOne Day1 input1 `shouldBe` "24000"
-            it "partTwo" $ do
-                partTwo Day1 input1 `shouldBe` "45000"
-        describe "Day2" $ do
-            it "partOne" $ do
-                partOne Day2 input2 `shouldBe` "15"
-            it "partTwo" $ do
-                partTwo Day2 input2 `shouldBe` "12"
-        describe "Day3" $ do
-            it "partOne" $ do
-                partOne Day3 input3 `shouldBe` "157"
-            it "partTwo" $ do
-                partTwo Day3 input3 `shouldBe` "70"
-        describe "Day4" $ do
-            it "partOne" $ do
-                partOne Day4 input4 `shouldBe` "2"
-            it "partTwo" $ do
-                partTwo Day4 input4 `shouldBe` "4"
-        describe "Day5" $ do
-            it "partOne" $ do
-                partOne Day5 input5 `shouldBe` "CMZ"
-            it "partTwo" $ do
-                partTwo Day5 input5 `shouldBe` "MCD"
-        describe "Day6" $ do
-            it "partOne" $ do
-                partOne Day6 input6 `shouldBe` "7"
-            it "partTwo" $ do
-                partTwo Day6 input6 `shouldBe` "19"
-        describe "Day7" $ do
-            it "partOne" $ do
-                partOne Day7 input7 `shouldBe` "95437"
-            it "partTwo" $ do
-                partTwo Day7 input7 `shouldBe` "24933642"
-        describe "Day8" $ do
-            it "partOne" $ do
-                partOne Day8 input8 `shouldBe` "21"
-            it "partTwo" $ do
-                partTwo Day8 input8 `shouldBe` "8"
-        describe "Day9" $ do
-            it "partOne" $ do
-                partOne Day9 input9 `shouldBe` "13"
-            it "partTwo" $ do
-                partTwo Day9 input9 `shouldBe` "1"
-        describe "Day10" $ do
-            it "partOne" $ do
-                partOne Day10 input10 `shouldBe` "13140"
-            it "partTwo" $ do
-                partTwo Day10 input10 `shouldBe` "##..##..##..##..##..##..##..##..##..##..\n###...###...###...###...###...###...###.\n####....####....####....####....####....\n#####.....#####.....#####.....#####.....\n######......######......######......####\n#######.......#######.......#######.....\n"
-        describe "Day11" $ do
-            it "partOne" $ do
-                partOne Day11 input11 `shouldBe` "10605"
-            it "partTwo" $ do
-                partTwo Day11 input11 `shouldBe` "2713310158"       
-        describe "Day12" $ do
-            it "partOne" $ do
-                partOne Day12 input12 `shouldBe` "31"
-            it "partTwo" $ do
-                partTwo Day12 input12 `shouldBe` "29"
-        describe "Day13" $ do
-            it "partOne" $ do
-                partOne Day13 input13 `shouldBe` "13"
-            it "partTwo" $ do
-                partTwo Day13 input13 `shouldBe` "140"
+        forM_ tests $ \(Test d filename p1 p2) -> do
+            input <- runIO $ readFile filename
+            describe (show d) $ do
+                it "partOne" $ do
+                    partOne d input `shouldBe` p1
+                it "partTwo" $ do
+                    partTwo d input `shouldBe` p2
