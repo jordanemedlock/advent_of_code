@@ -23,6 +23,7 @@ dayFuncs = [ runDayPart Day1 "./data/day1.txt"
            , runDayPart Day11 "./data/day11.txt"
            , runDayPart Day12 "./data/day12.txt"
            , runDayPart Day13 "./data/day13.txt"
+           , runDayPart Day14 "./data/day14.txt"
            ]
 
 runAll :: IO ()
