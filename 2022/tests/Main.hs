@@ -27,6 +27,7 @@ tests = [ Test Day1 "./data/day1_2.txt" "24000" "45000"
         , Test Day12 "./data/day12_2.txt" "31" "29"
         , Test Day13 "./data/day13_2.txt" "13" "140"
         , Test Day14 "./data/day14_2.txt" "24" "93"
+        , Test Day15 "./data/day15_2.txt" "24" "93"
 
         , Test Day1 "./data/day1.txt" "71924" "210406"
         , Test Day2 "./data/day2.txt" "13221" "13131"
@@ -43,6 +44,7 @@ tests = [ Test Day1 "./data/day1_2.txt" "24000" "45000"
         , Test Day12 "./data/day12.txt" "468" "459"
         , Test Day13 "./data/day13.txt" "5623" "20570"
         , Test Day14 "./data/day14.txt" "614" "26170"
+        , Test Day15 "./data/day15.txt" "614" "26170"
         ]
 
 main :: IO ()

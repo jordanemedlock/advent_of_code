@@ -33,6 +33,7 @@ library
                     , AdventOfCode.Day12
                     , AdventOfCode.Day13
                     , AdventOfCode.Day14
+                    , AdventOfCode.Day15
                     , AdventOfCode.Types
                     , AdventOfCode.Grid
     build-depends:    base >=4.16.3.0

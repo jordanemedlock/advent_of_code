@@ -1,6 +1,7 @@
 module AdventOfCode (
   Day1(..), Day2(..), Day3(..), Day4(..), Day5(..), Day6(..), Day7(..)
 , Day8(..), Day9(..), Day10(..), Day11(..), Day12(..), Day13(..), Day14(..)
+, Day15(..)
 , Day(..)
 ) where
 
@@ -18,5 +19,6 @@ import AdventOfCode.Day11 (Day11(..))
 import AdventOfCode.Day12 (Day12(..))
 import AdventOfCode.Day13 (Day13(..))
 import AdventOfCode.Day14 (Day14(..))
+import AdventOfCode.Day15 (Day15(..))
 import AdventOfCode.Types (Day(..))
 
