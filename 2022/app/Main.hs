@@ -25,6 +25,7 @@ dayFuncs = [ runDayPart Day1
            , runDayPart Day13
            , runDayPart Day14
            , runDayPart Day15
+           , runDayPart Day16
            ]
 
 runAll :: IO ()

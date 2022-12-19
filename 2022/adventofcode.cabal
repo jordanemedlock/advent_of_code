@@ -34,6 +34,7 @@ library
                     , AdventOfCode.Day13
                     , AdventOfCode.Day14
                     , AdventOfCode.Day15
+                    , AdventOfCode.Day16
                     , AdventOfCode.Types
                     , AdventOfCode.Grid
     build-depends:    base >=4.16.3.0
@@ -45,6 +46,7 @@ library
                     , heap
                     , astar
                     , parsec
+                    , random
     default-extensions:   QuasiQuotes
                         , OverloadedStrings
     default-language: GHC2021
