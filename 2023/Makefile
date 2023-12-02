@@ -4,3 +4,7 @@ day_1/main.o: day_1/main.cpp
 	
 day-1-%: day_1/main.o
 	cat day_1/input.txt | ./day_1/main.o --part-$*
+
+day-2-%: 
+	cd day_2; \
+		cargo run --quiet -- --part-$*
