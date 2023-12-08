@@ -8,3 +8,7 @@ day-1-%: day_1/main.o
 day-2-%: 
 	cd day_2; \
 		cargo run --quiet -- --part-$*
+
+day-3-%:
+	cd day_3; \
+		php main.php --part-$*
